@@ -1,6 +1,6 @@
 ---
 - name: This playbook will create a file
-  hosts: localhost
+  hosts: all 
   vars:
     target: "cron"
     store_file: "/tmp/package-check.txt"
@@ -15,7 +15,7 @@
     - name: Log the hostname a file
       ansible.builtin.lineinfile:
         path: "{{ store_file }}"
-        line: "{{ ansible_host }}"
+        line: "{{ ansible_host }} - Search target = {{ target }}"
         create: true
         state: present
       delegate_to: localhost

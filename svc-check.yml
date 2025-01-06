@@ -1,6 +1,6 @@
 ---
 - name: This playbook will create a file
-  hosts: localhost
+  hosts: all 
   vars:
     services_list:
       - httpd
