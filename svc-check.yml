@@ -1,0 +1,34 @@
+---
+- name: This playbook will create a file
+  hosts: localhost
+  vars:
+    services_list:
+      - httpd
+      - crond
+    store_file: "/tmp/svc-check.txt"
+  tasks:
+    - name: To check the services are running or not
+      ansible.builtin.shell: "systemctl status {{ item }} | grep active\n"
+      register: service_status
+      loop: "{{ services_list }}"
+    - name: Clean the oringinal stored file
+      ansible.builtin.file:
+        path: "{{ store_file }}"
+        state: absent
+    - name: Log hostname in a file
+      ansible.builtin.lineinfile:
+        path: "{{ store_file }}"
+        line: "{{ ansible_host }}"
+        create: true
+        state: present
+      when: item.stdout.find("active (running)") == -1
+      loop: "{{ service_status.results |flatten(levels=1) }}"
+    - name: To append the failed services in a file
+      ansible.builtin.lineinfile:
+        path: "{{ store_file }}"
+        line: "- {{ item.item }}"
+        create: true
+        state: present
+      when: item.stdout.find("active (running)") == -1
+      loop: "{{ service_status.results |flatten(levels=1) }}"
+      delegate_to: localhost

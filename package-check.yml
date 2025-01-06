@@ -1,0 +1,29 @@
+---
+- name: This playbook will create a file
+  hosts: localhost
+  vars:
+    target: "cron"
+    store_file: "/tmp/package-check.txt"
+  tasks:
+    - name: To check matched package and process 
+      ansible.builtin.shell: "echo Packages:;rpm -qa |grep -i {{ target }} ; echo Process: ;  ps -eo '%c %a' |grep -i {{ target }} |grep -v grep"
+      register: pkglist
+    - name: Clean the oringinal stored file
+      ansible.builtin.file:
+        path: "{{ store_file }}"
+        state: absent
+    - name: Log the hostname a file
+      ansible.builtin.lineinfile:
+        path: "{{ store_file }}"
+        line: "{{ ansible_host }}"
+        create: true
+        state: present
+      delegate_to: localhost
+    - name: To append the package name in a file
+      ansible.builtin.lineinfile:
+        path: "{{ store_file }}"
+        line: "- {{ item }}"
+        create: true
+        state: present
+      with_items: "{{ pkglist.stdout_lines }}"
+      delegate_to: localhost
