@@ -21,10 +21,4 @@
         state: present
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
-    - name: Print results
-      ansible.builtin.shell: "cat {{ store_file }}"
-      register: results
-    - debug:
-        var: "{{ results }}"
-      delegate_to: localhost
 
