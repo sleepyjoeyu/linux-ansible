@@ -5,6 +5,7 @@
   vars:
     target: "http"
     store_file: "/tmp/package-check.txt"
+    store_host: "host1.home18.com"
   tasks:
     - name: To check matched package and process
       #ansible.builtin.shell: "echo Packages:;rpm -qa |grep -i {{ target }} ; echo Process: ;  ps -eo '%c %a' |grep -i {{ target }} |grep -v grep"
@@ -29,4 +30,12 @@
       run_once: true
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
+    - name: copy store_file from local to another host
+      ansible.builtin.copy:
+        src: "{{ store_file }}"
+        dest: "{{ store_file }}"
+      run_once: true
+      delegate_to: "{{ store_host }}"
+      when: store_host is defined
+
 

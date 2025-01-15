@@ -5,6 +5,7 @@
   vars:
     services_list: "crond sshd httpd xxx abc vsftpd"
     store_file: "/tmp/svc-check.txt"
+    store_host: "host1.home18.com"
   tasks:
     - name: Check services status
       ansible.builtin.shell: |
@@ -34,3 +35,10 @@
       ansible.builtin.shell: |
         echo -e "{{ node_name }}\n{{ my_list|to_nice_yaml }}" >> "{{ store_file }}"
       delegate_to: localhost
+    - name: copy store_file from local to another host
+      ansible.builtin.copy:
+        src: "{{ store_file }}"
+        dest: "{{ store_file }}"
+      run_once: true
+      delegate_to: "{{ store_host }}"
+      when: store_host is defined

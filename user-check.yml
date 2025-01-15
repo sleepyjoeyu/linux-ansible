@@ -3,7 +3,7 @@
   hosts: all 
   vars:
     store_file: "/tmp/user-check.txt"
-      #store_host: "host1.home18.com"
+    store_host: "host1.home18.com"
   tasks:
     - name: To check the uses - uid=0 or uid > 1000 
       ansible.builtin.shell: "cat /etc/passwd | awk -F: '$3>=1000||$3==0{print $1\": \"$3}'"
