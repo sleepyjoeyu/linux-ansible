@@ -9,7 +9,7 @@
   tasks:
     - name: To check matched package and process
       #ansible.builtin.shell: "echo Packages:;rpm -qa |grep -i {{ target }} ; echo Process: ;  ps -eo '%c %a' |grep -i {{ target }} |grep -v grep"
-      ansible.builtin.shell: "echo Packages:$(rpm -qa |grep -i {{ target }}) ; echo Process: $( ps -eo '%c %a' |grep -i {{ target }} |grep -v grep)"
+      ansible.builtin.shell: "echo Packages: $(rpm -qa |grep -i {{ target }}) ; echo Process: $( ps -eo '%c %a' |grep -i {{ target }} |grep -v grep)"
       ignore_errors: true  
       register: pkglist
     - name: Clean the oringinal stored file
