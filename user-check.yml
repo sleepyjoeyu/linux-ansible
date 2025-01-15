@@ -2,7 +2,8 @@
 - name: This playbook will create a file
   hosts: all 
   vars:
-    store_file: "/tmp/test-user.txt"
+    store_file: "/tmp/user-check.txt"
+      #store_host: "host1.home18.com"
   tasks:
     - name: To check the uses - uid=0 or uid > 1000 
       ansible.builtin.shell: "cat /etc/passwd | awk -F: '$3>=1000||$3==0{print $1\": \"$3}'"
@@ -19,6 +20,14 @@
         line: "{{ item }}:\n{{ hostvars[item].userlist.stdout_lines|to_nice_yaml }}"
         create: true
         state: present
+      run_once: true
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
+    - name: copy store_file from local to another host
+      ansible.builtin.copy:
+        src: "{{ store_file }}"
+        dest: "{{ store_file }}" 
+      run_once: true
+      delegate_to: "{{ store_host }}"
+      when: store_host is defined
 

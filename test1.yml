@@ -14,13 +14,15 @@
       register: service_check
     - debug:
         var: service_check.stdout_lines
+    - name: set fact 1
+      ansible.builtin.set_fact:
+        node_name: "{{ inventory_hostname }}"
     - name: initialize empty list
       ansible.builtin.set_fact:
         my_list: []
-    - name: set fact
+    - name: set fact 2
       ansible.builtin.set_fact:
         my_list: "{{ my_list + [ item] }}"
-        node_name: "{{ inventory_hostname }}"
       when: item != "active"
       loop: "{{service_check.stdout_lines}}"
     - debug:

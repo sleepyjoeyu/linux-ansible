@@ -1,29 +1,32 @@
 ---
-- name: This playbook will create a file
+- name: Check package & process  on Linux hosts
   hosts: all 
+  become: yes
   vars:
-    target: "cron"
+    target: "http"
     store_file: "/tmp/package-check.txt"
   tasks:
-    - name: To check matched package and process 
-      ansible.builtin.shell: "echo Packages:;rpm -qa |grep -i {{ target }} ; echo Process: ;  ps -eo '%c %a' |grep -i {{ target }} |grep -v grep"
+    - name: To check matched package and process
+      #ansible.builtin.shell: "echo Packages:;rpm -qa |grep -i {{ target }} ; echo Process: ;  ps -eo '%c %a' |grep -i {{ target }} |grep -v grep"
+      ansible.builtin.shell: "echo Packages:$(rpm -qa |grep -i {{ target }}) ; echo Process: $( ps -eo '%c %a' |grep -i {{ target }} |grep -v grep)"
+      ignore_errors: true  
       register: pkglist
     - name: Clean the oringinal stored file
       ansible.builtin.file:
         path: "{{ store_file }}"
         state: absent
-    - name: Log the hostname a file
+      run_once: true
+      delegate_to: localhost
+    - debug:
+        var: inventory_hostname+"\n"+pkglist.stdout
+      delegate_to: localhost
+    - name: To append the username in a file
       ansible.builtin.lineinfile:
         path: "{{ store_file }}"
-        line: "{{ ansible_host }} - Search target = {{ target }}"
+        line: "{{ item }}:\n{{ hostvars[item].pkglist.stdout_lines|to_nice_yaml }}"
         create: true
         state: present
+      run_once: true
+      with_items: "{{ groups['all'] }}"
       delegate_to: localhost
-    - name: To append the package name in a file
-      ansible.builtin.lineinfile:
-        path: "{{ store_file }}"
-        line: "- {{ item }}"
-        create: true
-        state: present
-      with_items: "{{ pkglist.stdout_lines }}"
-      delegate_to: localhost
+
