@@ -1,0 +1,10 @@
+node1:
+- 'root: 0'
+- 'nobody: 65534'
+- 'test1: 1000'
+
+node2:
+- 'root: 0'
+- 'nobody: 65534'
+- 'joe: 1000'
+
