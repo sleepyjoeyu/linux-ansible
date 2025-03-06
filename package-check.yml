@@ -1,7 +1,6 @@
 ---
 - name: Check package & process  on Linux hosts
   hosts: all 
-  become: yes
   vars:
     target: "http"
     store_file: "/tmp/package-check.txt"
