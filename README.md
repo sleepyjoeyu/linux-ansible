@@ -1,4 +1,11 @@
-# linux-ansible
+# linux-ansible (以RHEL作為測試Target)
+
+## 目錄說明
+
+demo-videos： Ansible Automation Platform template執行playbook的展示影片 </br>
+samples： 執行playbook後的產出文件範例
+
+## Playbooks 說明
 package-check.yaml
 - 功用：輸入關鍵字，搜尋Linux系統中有無符合之RPM套件與程序，並將結果整理為一文檔傳出
 - 變數：
