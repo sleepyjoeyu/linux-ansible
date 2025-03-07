@@ -1,0 +1,17 @@
+node1:
+- 'node1.example.com, CPU= 2, RAM= 3.6Gi, Manufacturer= Red Hat, Produc= RHEL '
+- OS=Red Hat Enterprise Linux release 8.7 (Ootpa), Kernel=4.18.0-425.3.1.el8.x86_64
+- 'Storage:'
+- 'vda   disk   10G '
+- 'Enternet Network devices:'
+- 'eth0    ethernet  connected  Wired connection 1 '
+
+node2:
+- 'node2.example.com, CPU= 2, RAM= 1.8Gi, Manufacturer= Red Hat, Produc= RHEL '
+- OS=Red Hat Enterprise Linux release 8.7 (Ootpa), Kernel=4.18.0-425.3.1.el8.x86_64
+- 'Storage:'
+- 'vda   disk   10G '
+- 'vdb   disk    1G '
+- 'Enternet Network devices:'
+- 'eth0    ethernet  connected  Wired connection 1 '
+
