@@ -25,3 +25,12 @@ user-check.yml
     - store_host: "傳到那一主機上"
 - 指令範例：
   - `ansible-playbook  -i ../hosts-local user-check.yml -e store_host=node1`    
+
+
+machine-check.yml
+- 功用：蒐集主機基本資訊，並將結果整理為一文檔傳出
+- 變數：
+    - store_file: "整理文檔"
+    - store_host: "傳到那一主機上"
+- 指令範例：
+  - `ansible-playbook  -i ../hosts-local machine-check.yml -e store_host=node1`    

@@ -2,9 +2,9 @@
 - name: Check services on Linux hosts
   hosts: all 
   vars:
-    services_list: "crond sshd httpd xxx abc vsftpd"
+    services_list: "crond sshd httpd vsftpd"
     store_file: "/tmp/svc-check.txt"
-    store_host: "host1.home18.com"
+    store_host: "host1"
   tasks:
     - name: Check services status
       ansible.builtin.shell: |
