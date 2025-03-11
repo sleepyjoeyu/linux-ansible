@@ -3,7 +3,7 @@
   hosts: all 
   vars:
     target: "http"
-    store_file: "/tmp/package-check.txt"
+    package_store_file: "/tmp/package-check.txt"
     store_host: "host1"
   tasks:
     - name: To check matched package and process
@@ -12,7 +12,7 @@
       register: pkglist
     - name: Clean the oringinal stored file
       ansible.builtin.file:
-        path: "{{ store_file }}"
+        path: "{{ package_store_file }}"
         state: absent
       run_once: true
       delegate_to: localhost
@@ -21,17 +21,17 @@
       delegate_to: localhost
     - name: To append the username in a file
       ansible.builtin.lineinfile:
-        path: "{{ store_file }}"
+        path: "{{ package_store_file }}"
         line: "{{ item }}:\n{{ hostvars[item].pkglist.stdout_lines|to_nice_yaml }}"
         create: true
         state: present
       run_once: true
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
-    - name: copy store_file from local to another host
+    - name: copy package_store_file from local to another host
       ansible.builtin.copy:
-        src: "{{ store_file }}"
-        dest: "{{ store_file }}"
+        src: "{{ package_store_file }}"
+        dest: "{{ package_store_file }}"
       run_once: true
       delegate_to: "{{ store_host }}"
       when: store_host is defined

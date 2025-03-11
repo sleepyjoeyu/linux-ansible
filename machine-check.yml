@@ -2,32 +2,36 @@
 - name: This playbook will collect RHEL machine basic information 
   hosts: all 
   vars:
-    store_file: "/tmp/machine-check.txt"
+    machine_store_file: "/tmp/machine-check.txt"
     store_host: "host1"
   tasks:
     - name: To check Machine info 
       ansible.builtin.shell: |
-        echo "$(hostname), CPU= $(nproc), RAM= $(free -h|grep Mem:|awk '{print $2}'), Manufacturer=$(dmidecode -t baseboard|grep Manufacturer| awk -F: '{print $2}'), Produc=$(dmidecode -t baseboard|grep Product| awk -F: '{print $2}') "; echo "OS=$(cat /etc/redhat-release), Kernel=$(uname -r)" ;echo Storage: ;lsblk -io KNAME,TYPE,SIZE,MODEL|grep -Eiv 'loop[0-9]+|^dm-' |grep disk ; echo "Enternet Network devices:" ; nmcli d |grep "ethernet "
+        echo "$(hostname), CPU= $(nproc), RAM= $(free -h|grep Mem:|awk '{print $2}'), Manufacturer=$(dmidecode -t baseboard|grep Manufacturer| awk -F: '{print $2}'), Produc=$(dmidecode -t baseboard|grep Product| awk -F: '{print $2}') "
+        echo "OS=$(cat /etc/redhat-release), Kernel=$(uname -r)" 
+        echo "Storage:" 
+        lsblk -io KNAME,TYPE,SIZE,MODEL|grep -Eiv 'loop[0-9]+|^dm-' |grep disk 
+        echo "Enternet Network devices:" ; nmcli d |grep "ethernet "
       register: chkdata
     - name: Clean old file
       ansible.builtin.file:
-        path: "{{ store_file }}"
+        path: "{{ machine_store_file }}"
         state: absent 
       run_once: true
       delegate_to: localhost
     - name: To append the result in a file
       ansible.builtin.lineinfile:
-        path: "{{ store_file }}"
+        path: "{{ machine_store_file }}"
         line: "{{ item }}:\n{{ hostvars[item].chkdata.stdout_lines|to_nice_yaml }}"
         create: true
         state: present
       run_once: true
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
-    - name: copy store_file from local to another host
+    - name: copy machine_store_file from local to another host
       ansible.builtin.copy:
-        src: "{{ store_file }}"
-        dest: "{{ store_file }}" 
+        src: "{{ machine_store_file }}"
+        dest: "{{ machine_store_file }}" 
       run_once: true
       delegate_to: "{{ store_host }}"
       when: store_host is defined

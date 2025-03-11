@@ -1,0 +1,41 @@
+---
+- name: This playbook will collect RHEL basic system health information 
+  hosts: all 
+  vars:
+    health_store_file: "/tmp/health-check.txt"
+    store_host: "host1"
+  tasks:
+    - name: To check system health info 
+      ansible.builtin.shell: |
+        echo "Last time - $(last reboot|head -n 1)"
+        echo "---------------------------" 
+        echo "Today's error log"
+        journalctl -S today  -p err --no-pager 
+        echo "---------------------------" 
+        echo "Disk usage over 80%"
+        df -h  | grep -v loop |grep -E  '[8-9][0-9]%|100%' 
+        echo "---------------------------" 
+      register: healthdata
+    - name: Clean old file
+      ansible.builtin.file:
+        path: "{{ health_store_file }}"
+        state: absent 
+      run_once: true
+      delegate_to: localhost
+    - name: To append the result in a file
+      ansible.builtin.lineinfile:
+        path: "{{ health_store_file }}"
+        line: "{{ item }}:\n{{ hostvars[item].healthdata.stdout_lines|to_nice_yaml(indent=2) }}"
+        create: true
+        state: present
+      run_once: true
+      with_items: "{{ groups['all'] }}"
+      delegate_to: localhost
+    - name: copy health_store_file from local to another host
+      ansible.builtin.copy:
+        src: "{{ health_store_file }}"
+        dest: "{{ health_store_file }}" 
+      run_once: true
+      delegate_to: "{{ store_host }}"
+      when: store_host is defined
+

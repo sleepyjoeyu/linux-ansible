@@ -3,7 +3,7 @@
   hosts: all 
   vars:
     services_list: "crond sshd httpd vsftpd"
-    store_file: "/tmp/svc-check.txt"
+    svc_store_file: "/tmp/svc-check.txt"
     store_host: "host1"
   tasks:
     - name: Check services status
@@ -27,17 +27,17 @@
         msg: "{{ node_name }}\n{{ my_list|to_nice_yaml }}" 
     - name: clean tmp files @all hosts
       ansible.builtin.file:
-        path: "{{ store_file }}"
+        path: "{{ svc_store_file }}"
         state: absent
       delegate_to: localhost
     - name: save result
       ansible.builtin.shell: |
-        echo -e "{{ node_name }}\n{{ my_list|to_nice_yaml }}" >> "{{ store_file }}"
+        echo -e "{{ node_name }}\n{{ my_list|to_nice_yaml }}" >> "{{ svc_store_file }}"
       delegate_to: localhost
-    - name: copy store_file from local to another host
+    - name: copy svc_store_file from local to another host
       ansible.builtin.copy:
-        src: "{{ store_file }}"
-        dest: "{{ store_file }}"
+        src: "{{ svc_store_file }}"
+        dest: "{{ svc_store_file }}"
       run_once: true
       delegate_to: "{{ store_host }}"
       when: store_host is defined

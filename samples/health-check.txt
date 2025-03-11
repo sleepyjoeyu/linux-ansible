@@ -1,0 +1,52 @@
+node1:
+- Last time - reboot   system boot  4.18.0-425.3.1.e Thu Mar  6 22:49   still running
+- '---------------------------'
+- Today's error log
+- -- Logs begin at Thu 2025-03-06 22:49:36 EST, end at Sun 2025-03-09 23:27:30 EDT.
+  --
+- 'Mar 09 08:02:24 node1.example.com systemd-coredump[12905]: Process 6293 (systemd-journal)
+  of user 0 dumped core.'
+- 'Mar 09 08:02:24 node1.example.com systemd[1]: systemd-journald.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 19:41:09 node1.example.com systemd[1]: systemd-udevd.service: Watchdog timeout
+  (limit 3min)!'
+- 'Mar 09 19:41:09 node1.example.com systemd[1]: systemd-logind.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 19:41:09 node1.example.com systemd-coredump[20031]: Process 702 (systemd-udevd)
+  of user 0 dumped core.'
+- 'Mar 09 19:41:09 node1.example.com systemd-coredump[20030]: Process 838 (systemd-logind)
+  of user 0 dumped core.'
+- '---------------------------'
+- Disk usage over 80%
+- '---------------------------'
+
+node2:
+- Last time - reboot   system boot  4.18.0-425.3.1.e Thu Mar  6 22:49   still running
+- '---------------------------'
+- Today's error log
+- -- Logs begin at Thu 2025-03-06 22:49:37 EST, end at Sun 2025-03-09 23:27:30 EDT.
+  --
+- 'Mar 09 08:02:24 node2.example.com systemd-coredump[8827]: Process 7712 (systemd-journal)
+  of user 0 dumped core.'
+- 'Mar 09 08:02:24 node2.example.com systemd[1]: systemd-logind.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 08:02:24 node2.example.com systemd[1]: systemd-udevd.service: Watchdog timeout
+  (limit 3min)!'
+- 'Mar 09 08:02:24 node2.example.com systemd[1]: systemd-journald.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 08:02:24 node2.example.com systemd-coredump[8830]: Process 4649 (systemd-logind)
+  of user 0 dumped core.'
+- 'Mar 09 08:02:24 node2.example.com systemd-coredump[8835]: Process 7724 (systemd-udevd)
+  of user 0 dumped core.'
+- 'Mar 09 19:41:09 node2.example.com systemd[1]: systemd-logind.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 19:41:09 node2.example.com systemd-coredump[13239]: Process 8834 (systemd-journal)
+  of user 0 dumped core.'
+- 'Mar 09 19:41:09 node2.example.com systemd[1]: systemd-journald.service: Watchdog
+  timeout (limit 3min)!'
+- 'Mar 09 19:41:09 node2.example.com systemd-coredump[13242]: Process 8845 (systemd-logind)
+  of user 0 dumped core.'
+- '---------------------------'
+- Disk usage over 80%
+- '---------------------------'
+

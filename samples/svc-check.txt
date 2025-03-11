@@ -1,10 +1,8 @@
-node2
-- httpd not running
-- vsftpd not running
-- nothing not running
-
 node1
 - httpd not running
 - vsftpd not running
-- nothing not running
+
+node2
+- httpd not running
+- vsftpd not running
 

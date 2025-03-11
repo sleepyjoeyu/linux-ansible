@@ -2,7 +2,7 @@
 - name: This playbook will list all users which UID=0 or UID >=100  
   hosts: all 
   vars:
-    store_file: "/tmp/user-check.txt"
+    user_store_file: "/tmp/user-check.txt"
     store_host: "host1"
   tasks:
     - name: To check the users - uid=0 or uid > 1000 
@@ -10,23 +10,23 @@
       register: userlist
     - name: Clean old file
       ansible.builtin.file:
-        path: "{{ store_file }}"
+        path: "{{ user_store_file }}"
         state: absent 
       run_once: true
       delegate_to: localhost
     - name: To append the username in a file
       ansible.builtin.lineinfile:
-        path: "{{ store_file }}"
+        path: "{{ user_store_file }}"
         line: "{{ item }}:\n{{ hostvars[item].userlist.stdout_lines|to_nice_yaml }}"
         create: true
         state: present
       run_once: true
       with_items: "{{ groups['all'] }}"
       delegate_to: localhost
-    - name: copy store_file from local to another host
+    - name: copy user_store_file from local to another host
       ansible.builtin.copy:
-        src: "{{ store_file }}"
-        dest: "{{ store_file }}" 
+        src: "{{ user_store_file }}"
+        dest: "{{ user_store_file }}" 
       run_once: true
       delegate_to: "{{ store_host }}"
       when: store_host is defined
